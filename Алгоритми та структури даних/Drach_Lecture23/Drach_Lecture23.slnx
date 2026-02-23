@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="Drach_Lecture23/Drach_Lecture23.vcxproj" />
+  <Project Path="Drach_Lecture23/Drach_Lecture23.vcxproj" Id="887b4b4a-f4ea-4dc2-8107-6d32e22b2600" />
 </Solution>
