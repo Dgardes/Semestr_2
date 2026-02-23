@@ -39,7 +39,8 @@ class SortingAnalyzer
 		InsertionSort,
 		MergeSort,
 		QuickSort,
-		HeapSort
+		HeapSort,
+		HybridSort
 	};
 
 	public: std::vector<int> generateData(int size, generatorType type)
@@ -74,27 +75,31 @@ class SortingAnalyzer
 
 	public: void analyzeSort(std::vector<int>& data, sortType type)
 	{
+		std::vector<int> tempData = data;
 		//запускаємо таймер
 		startTime = std::chrono::high_resolution_clock::now();
 		switch (type)
 		{
 			case BubbleSort:
-				bubbleSort(data);
+				bubbleSort(tempData);
 				break;
 			case SelectionSort:
-				selectionSort(data);
+				selectionSort(tempData);
 				break;
 			case InsertionSort:
-				insertionSort(data);
+				insertionSort(tempData);
 				break;
 			case MergeSort:
-				mergeSort(data, 0, (int)data.size() - 1);
+				mergeSort(tempData, 0, (int)tempData.size() - 1);
 				break;
 			case QuickSort:
-				quickSort(data);
+				quickSort(tempData);
 				break;
 			case HeapSort:
-				heapSort(data);
+				heapSort(tempData);
+				break;
+			case HybridSort:
+				hybridSort(tempData);
 				break;
 			default:
 				return;
@@ -105,6 +110,7 @@ class SortingAnalyzer
 		std::cout << "Sorting completed in " << duration << " ms\n";
 		std::cout << "Comparisons: " << comparisons << "\n";
 		std::cout << "Swaps: " << swaps << "\n";
+		resetMetrics();// скидаємо лічильники після сортування
 	};
 
 	public: void resetMetrics()
@@ -167,6 +173,7 @@ class SortingAnalyzer
 			int key = data[i]; // Елемент, який потрібно вставити
 			int j = i - 1;
 			// Зсуваємо елементи більші за key на одну позицію вправо
+			comparisons++; //збільшуємо лічильник порівнянь
 			while (j >= 0 && data[j] > key) 
 			{
 				comparisons++; //збільшуємо лічильник порівнянь
@@ -241,10 +248,10 @@ class SortingAnalyzer
 
 	private: void quickSort(std::vector<int>& data)
 	{
-		vector<int> sortedData = recursiveQuickSort(data);
+		data = recursiveQuickSort(data);
 	}
 
-	private: vector<int> recursiveQuickSort(std::vector<int>& data)
+	private: std::vector<int> recursiveQuickSort(std::vector<int>& data)
 	{
 		if (data.size() <= 1) 
 		{
@@ -284,7 +291,7 @@ class SortingAnalyzer
 	{
 		// Крок 1: Будуємо max heap
 		// Починаємо з останнього не-листового вузла
-		for (int i = data.size() / 2 - 1; i <= 0; i--) 
+		for (int i = data.size() / 2 - 1; i >= 0; i--) 
 		{ heapify(data, data.size(), i); }
 
 		// Крок 2: Витягуємо елементи з купи один за одним
@@ -293,15 +300,16 @@ class SortingAnalyzer
 			// Переміщуємо поточний корінь в кінець
 			int temp = data[0];
 			data[0] = data[i];
-			data[0] = temp;
+			data[i] = temp;
 
 			// викликаємо heapify на зменшеній купі
 			heapify(data, i, 0);
 		}
 	}
 
-	void heapify(vector<int> arr, int n, int i) 
+	void heapify(std::vector<int>& arr, int n, int i)
 	{
+		comparisons++;
 		int largest = i; // Ініціалізуємо найбільший як корінь
 		int left = 2 * i + 1; // Лівий дочірній
 		int right = 2 * i + 2; // Правий дочірній
@@ -319,7 +327,7 @@ class SortingAnalyzer
 
 		if (largest != i) 
 		{
-			swap(arr[i], arr[largest]);
+			swaps++;
 			int temp = arr[i];
 			arr[i] = arr[largest];
 			arr[largest] = temp;
@@ -327,6 +335,38 @@ class SortingAnalyzer
 			heapify(arr, n, largest);
 		}
 	}
+
+	void hybridSort(std::vector<int>& data)
+	{
+		hybridSortRecursive(data, 0, (int)data.size() - 1);
+	}
+
+	private: void hybridSortRecursive(std::vector<int>& data, int left, int right) 
+	{
+        // ПОРІГ: якщо елементів 15 або менше — використовуємо вставку
+        if (right - left <= 15) 
+		{
+            // Звичайна логіка Insertion Sort для шматочка масиву
+            for (int i = left + 1; i <= right; i++) {
+                int key = data[i];
+                int j = i - 1;
+                while (j >= left && data[j] > key) {
+                    comparisons++;
+                    swaps++;
+                    data[j + 1] = data[j];
+                    j--;
+                }
+                data[j + 1] = key;
+            }
+            return;
+        }
+
+        // Якщо масив великий — продовжуємо Merge Sort
+        int mid = left + (right - left) / 2;
+        hybridSortRecursive(data, left, mid);
+        hybridSortRecursive(data, mid + 1, right);
+        merge(data, left, mid, right); // Використовуємо твій існуючий merge
+    }
 
 };
 inline SortingAnalyzer* SortingAnalyzer::instance = nullptr;
