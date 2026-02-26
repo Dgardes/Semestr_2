@@ -9,7 +9,7 @@ public class Main {
         HashMap<String, Group> college = new HashMap<>();
         Student student = new Student("Oleg", true);
         Student student1 = new Student("Alic", true);
-        Student student2 = new Student("Oleg1", false);
+        Student student2 = new Student("Oleg1", true);
         Student student3 = new Student("Oleg4", false);
         HashMap<Integer, Student> students1 = new HashMap<>();
         students1.put(1, student);

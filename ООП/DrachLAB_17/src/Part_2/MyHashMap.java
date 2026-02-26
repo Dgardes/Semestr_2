@@ -27,10 +27,9 @@ public class MyHashMap
         myMap.clear();
     }
 
-    public Map<String, String> findByKey(String key)
+    public String findByKey(String key)
     {
-        Map<String, String> mapa = new HashMap<String, String>(){Map.Entry<String, String> myMap; };
-        return mapa;
+        return myMap.get(key);
     }
 
     public Map<String, String> findByValue(String value)
@@ -41,27 +40,58 @@ public class MyHashMap
 
         for(Map.Entry<String, String> pair : myMap.entrySet())
         {
-            if(pair.getValue() == value)
+            if(pair.getValue().equals(value))
             { mapa.put(pair.getKey(), pair.getValue()); }
         }
         return mapa;
     }
 
-    public Map<String, String> findFirstByValue(String value)
+    public Map.Entry<String, String> findFirstByValue(String value)
     {
-        Map<String, String> mapa = new HashMap<String, String>();
-
-        if(!myMap.containsValue(value)) { return null;}
+        if(!myMap.containsValue(value))
+        { return null;}
 
         for(Map.Entry<String, String> pair : myMap.entrySet())
         {
-            if(pair.getValue() == value)
-            { mapa.put(pair.getKey(), pair.getValue()); return mapa;}
+            if(pair.getValue().equals(value))
+            { return pair; }
         }
-        return mapa;
+        return null;
     }
 
+    public HashMap<String, String>[] slice(int nextMapIdx)
+    {
+        HashMap<String, String>[] maps = new HashMap[]{new HashMap<>(), new HashMap<>()};
+        int mapSize = myMap.size();
+        int counter = 0;
+        if(nextMapIdx == -1)
+        {
+            for(Map.Entry<String, String> entry : myMap.entrySet())
+            {
+                if (counter <= mapSize / 2)
+                {maps[0].put(entry.getKey(), entry.getValue()); }
+                else {maps[1].put(entry.getKey(), entry.getValue()); }
+                counter++;
+            }
+        }
+        else
+        {
+            for(Map.Entry<String, String> entry : myMap.entrySet())
+            {
+                if (counter <= nextMapIdx)
+                {maps[0].put(entry.getKey(), entry.getValue()); }
+                else {maps[1].put(entry.getKey(), entry.getValue()); }
+                counter++;
+            }
+        }
 
+        return maps;
+    }
+
+    public void remove(String key)
+    {
+        myMap.remove(key);
+    }
 
     @Override
     public String toString() {
