@@ -1,7 +1,5 @@
 package Part_2;
 
-import Part_1.MyStringNEXT;
-
 public class Main
 {
     public static void main(String[] args)

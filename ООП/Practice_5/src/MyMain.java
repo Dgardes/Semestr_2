@@ -1,5 +1,5 @@
 
-public class Main {
+public class MyMain {
     public static void main(String[] args) {
 
         double firstNum = -15.5;

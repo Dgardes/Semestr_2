@@ -1,4 +1,4 @@
-package Part_1;
+package Part_3;
 
 public class MyStringNEXT
 {
@@ -64,8 +64,23 @@ public class MyStringNEXT
         return string1.substring(startIndex, endIndex);
     }
 
+    public static byte[] stringToBytes(String string1)
+    {
+        return string1.getBytes();
+    }
 
+    public static int getHashCode(String string1)
+    {
+        return string1.hashCode();
+    }
 
-
-
+    public static String removeSubString(String string1, int startIndex, int endIndex)
+    {
+        String str = findSubString(string1, startIndex, endIndex);
+        if ( str != null)
+        {
+            str = string1.replace(str, "");
+        }
+        return str;
+    }
 }
