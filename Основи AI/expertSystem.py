@@ -20,20 +20,21 @@ questions: Dict[str : str] = {
     "Чи важливо, щоб велосипед був компактним та складався?" : "compact",
 }
 
-problemFeatures: list[str] = []
+features: list[str] = []
 
 def diagnose(rules : Dict[Tuple(str, ...) : str], questions: Dict[str : str]):
-    problemIsFounded: bool = False
+    resultIsFound: bool = False
     
-    for question_key, problem_value  in questions.items(): #проходимо по кожній парі з словника питань
+    for question_key, result_value  in questions.items(): #проходимо по кожній парі з словника питань
         if askQuestion(question_key, False):
-            problemFeatures.append(problem_value)
-    for problems, result in rules.items(): #проходимо по кожній парі правил
-        if all(problem in problemFeatures for problem in problems): #якщо список потреб користувача збігається зі списком характеристик велсипеда,
-            print("варіант знайдено:\n" + "вам підходить:" + result)
-            problemIsFounded = True
+            features.append(result_value)
+
+    for bicycleFeatures, bicycleResult in rules.items(): #проходимо по кожній парі правил
+        if all(feature in features for feature in bicycleFeatures): #якщо список потреб користувача збігається зі списком характеристик велсипеда,
+            print("варіант знайдено:\n" + "вам підходить:" + bicycleResult)
+            resultIsFound = True
             break
-    if problemIsFounded == False:
+    if resultIsFound == False:
         print("нажаль, такого універсального варіанту не існує")
 
 
