@@ -45,3 +45,27 @@ class SmsNotifier extends BaseNotifier
         console.log("📱 SMS → " + this.phonePrefix + to + ": \"" + shortBody + "\"");
     }
 }
+
+//функція для розсилки сповіщень через усі канали
+function sendBulkNotification(notifiers: BaseNotifier[], to: string, subject: string, body: string): void 
+{
+    notifiers.forEach(function(notifier) {
+        //виклик спільниого шаблонного методу
+        notifier.notify(to, subject, body);
+    });
+}
+
+console.log("=== Завдання 4: Наслідування та поліморфізм ===");
+
+const notifiers: BaseNotifier[] = [
+  new EmailNotifier("smtp.gmail.com"),
+  new SmsNotifier(),
+];
+
+// Параметр to — рядок-адресат; його формат залежить від каналу
+sendBulkNotification(
+  notifiers,
+  "user@example.com",
+  "Нова задача призначена",
+  "Вам призначено задачу 'Розробити API' з пріоритетом high. Дедлайн: 01.02.2025",
+);
