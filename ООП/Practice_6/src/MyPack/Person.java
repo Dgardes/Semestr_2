@@ -1,3 +1,5 @@
+package MyPack;
+
 import java.io.Serializable;
 
 public class Person implements Serializable
@@ -9,6 +11,9 @@ public class Person implements Serializable
         this.age = age;
         this.name = name;
     }
+
+    public Person()
+    { }
 
     public String getName() {
         return name;
@@ -34,3 +39,4 @@ public class Person implements Serializable
                 '}';
     }
 }
+
