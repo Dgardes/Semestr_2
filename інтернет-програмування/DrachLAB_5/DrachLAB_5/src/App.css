@@ -1,26 +1,29 @@
-.add-form {
+.todo-item {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-bottom: 1px solid #444;
 }
 
-.add-form input {
+.todo-item span {
   flex: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  text-align: left;
 }
 
-.add-form button {
-  padding: 8px 16px;
-  background-color: #2563eb;
-  color: white;
+.completed span {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.delete-btn {
+  background: transparent;
   border: none;
-  border-radius: 4px;
+  font-size: 1.2rem;
   cursor: pointer;
+  transition: transform 0.1s;
 }
 
-.add-form button:disabled {
-  background-color: #94a3b8;
-  cursor: not-allowed;
+.delete-btn:hover {
+  transform: scale(1.2);
 }

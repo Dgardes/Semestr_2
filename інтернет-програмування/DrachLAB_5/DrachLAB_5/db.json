@@ -11,14 +11,9 @@
       "completed": false
     },
     {
-      "id": 3,
-      "title": "Налаштувати інвалідацію кешу",
-      "completed": true
-    },
-    {
-      "title": "Test",
-      "completed": false,
-      "id": 4
+      "title": "Tset-1",
+      "completed": true,
+      "id": 3
     }
   ]
 }
