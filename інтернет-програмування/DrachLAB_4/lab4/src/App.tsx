@@ -1,21 +1,12 @@
 import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import Layout from "./components/Layout/Layout";
-// Розкоментуйте кожен імпорт після того, як створите відповідний файл на Етапах 5–7:
-// import TasksPage from "./pages/TasksPage/TasksPage";
-// import TaskDetailPage from "./pages/TaskDetailPage/TaskDetailPage";
-// import NewTaskPage from "./pages/NewTaskPage/NewTaskPage";
+//Розкоментуйте кожен імпорт після того, як створите відповідний файл на Етапах 5–7:
+import TasksPage from "./pages/TasksPage/TasksPage";
+import TaskDetailPage from "./pages/TaskDetailPage/TaskDetailPage";
+import NewTaskPage from "./pages/NewTaskPage/NewTaskPage";
 
-// тимчасові
-const TasksPage = ({ tasks }: any) => (
-  <div></div>
-);
-const NewTaskPage = ({ onAdd }: any) => (
-  <div></div>
-);
-const TaskDetailPage = ({ tasks }: any) => (
-  <div></div>
-);
+
 
 // TODO (Варіант А): імпортуйте useState, INITIAL_TASKS та тип Task
 import type { Task, TaskStatus } from "./types/task";
