@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="11.0.17" class="java.beans.XMLDecoder">
+ <object class="Part_2.Owl">
+  <void property="gender">
+   <string>Чоловіча стать</string>
+  </void>
+  <void property="name">
+   <string>Чак</string>
+  </void>
+  <void property="speed">
+   <double>20.0</double>
+  </void>
+  <void property="type">
+   <string>Пугач</string>
+  </void>
+  <void property="weight">
+   <double>150.0</double>
+  </void>
+  <void property="wingSpan">
+   <double>35.5</double>
+  </void>
+ </object>
+</java>

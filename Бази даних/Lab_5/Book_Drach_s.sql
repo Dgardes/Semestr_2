@@ -1,0 +1,72 @@
+CREATE DATABASE Book_Drach;
+USE Book_Drach;
+
+CREATE TABLE Catalogs 
+(
+	cat_ID INT NOT NULL AUTO_INCREMENT,
+	cat_name VARCHAR(45) NOT NULL,
+	PRIMARY KEY (cat_ID)
+) ENGINE = InnoDB;
+
+CREATE TABLE Books 
+(
+	book_ID INT NOT NULL AUTO_INCREMENT,
+	b_name VARCHAR(45) NOT NULL,
+	b_author VARCHAR(45) NOT NULL,
+	b_year INT NOT NULL,
+	b_price DECIMAL(6,2) NULL,
+	b_count INT NULL,
+	b_cat_ID INT NOT NULL,
+	PRIMARY KEY (book_ID),
+	FOREIGN KEY (b_cat_ID) REFERENCES Catalogs (cat_ID)
+	ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
+USE Book_Drach;
+ALTER TABLE Books ADD b_pages INT;
+ALTER TABLE Books MODIFY b_lang VARCHAR(45);
+ALTER TABLE Books MODIFY b_cover VARCHAR(45);
+ALTER TABLE Books MODIFY b_version INT;
+
+ALTER TABLE Books DROP COLUMN b_pages;
+ALTER TABLE Books DROP COLUMN b_version;
+
+DESCRIBE Books;
+
+CREATE TABLE Users 
+(
+  user_ID INT NOT NULL AUTO_INCREMENT,
+  u_name VARCHAR(45) NOT NULL,
+  u_patronymic VARCHAR(45) NOT NULL,
+  u_surname VARCHAR(45) NOT NULL,
+  u_phone VARCHAR(45) NULL,
+  u_email VARCHAR(45) NULL,
+  u_status ENUM("active", "passive", "lock", "gold") NOT NULL DEFAULT "passive",
+  PRIMARY KEY (user_ID)
+) ENGINE = InnoDB;
+
+CREATE TABLE Orders 
+(
+  order_ID INT NOT NULL AUTO_INCREMENT,
+  o_time DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  o_number INT NOT NULL,
+  o_user_ID INT NOT NULL,
+  o_book_ID INT NOT NULL,
+  PRIMARY KEY (order_ID),
+  FOREIGN KEY (o_user_ID) REFERENCES Users (user_ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  FOREIGN KEY (o_book_ID) REFERENCES Books (book_ID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE = InnoDB;
+
+
+
+USE Book_Drach;
+
+DESCRIBE Catalogs;
+DESCRIBE Books;
+DESCRIBE Users;
+DESCRIBE Orders;

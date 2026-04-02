@@ -1,3 +1,5 @@
+package Practice;
+
 public class Person
 {
     private String name;
