@@ -64,7 +64,7 @@ export class TasksController {
   @Get(":id")
   findOne(@Param("id") id: string): taskEntity.Task | { message: string } {
     // TODO: знайти задачу за id
-    let foundTask = this.tasks.find(task => task.id === id);
+    const foundTask = this.tasks.find(task => task.id === id);
     if (!foundTask)
     {
         return { message: "Задачу не знайдено."}
@@ -97,6 +97,13 @@ export class TasksController {
   // Якщо знайдено — видалити та повернути підтвердження
   @Delete(":id")
   remove(@Param("id") id: string): { message: string } {
-    return { message: "TODO" }; // TODO: видалити задачу за id
+    // TODO: видалити задачу за id
+    const foundTask = this.tasks.find(task => task.id === id);
+    if (!foundTask)
+    {
+        return { message: "Задачу не знайдено."}
+    } 
+    this.tasks = this.tasks.filter(task => task.id != id)
+    return { message: "Задачу видалено."}
   }
 }
