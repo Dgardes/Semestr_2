@@ -118,7 +118,11 @@ public abstract class Product implements Serializable
     public final void applyExtraDiscount(double discountInMoney) {
         if (discountInMoney > 0 && this.price > 0) {
             double extraDiscountCoefficient = discountInMoney / this.price;
-            applyExtraDiscount(extraDiscountCoefficient);
+            double newDiscount = this.discount + extraDiscountCoefficient;
+            if (newDiscount >= 1.0) {
+                newDiscount = 1.0;
+            }
+            this.discount = newDiscount;
         }
     }
 
@@ -129,11 +133,11 @@ public abstract class Product implements Serializable
     }
 
     public String generateInvoiceRow(String currency) {
-    String tempLabel = this.maxStorageTemperature <= 5.0 ? " [Зберігати при низькій температурі]" : "";
-    String row =  "[Код: " + this.code + "] " + this.name + " " + this.price + " " + currency;
-    if(this.discount > 0.0) row += " Знижка: " + this.discount;
-    return  row + tempLabel;
-}
+        String tempLabel = this.maxStorageTemperature <= 5.0 ? " [Зберігати при низькій температурі]" : "";
+        String row =  "[Код: " + this.code + "] " + this.name + " " + String.format("%.2f", this.price) + " " + currency;
+        if(this.discount > 0.0) row += " Знижка: " + String.format("%.2f", this.discount * 100) + "%";
+        return  row + tempLabel;
+    }
 
     private String getTodayDate()
     {

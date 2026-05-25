@@ -46,6 +46,7 @@ public class Cart
     public double calculateTotalCartCost(double taxRate)
     {
         double total = 0;
+        if (items == null || items.isEmpty()) return 0.0;
         for(Map.Entry<Product, Double> entry : items.entrySet())
         {
             Product product = entry.getKey();

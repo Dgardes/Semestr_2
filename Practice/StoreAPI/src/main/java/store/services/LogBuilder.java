@@ -1,6 +1,8 @@
 package store.services;
 
 import store.objects.Product;
+import store.objects.WeightProduct;
+
 import java.util.Map;
 
 public class LogBuilder
@@ -21,11 +23,19 @@ public class LogBuilder
             {
                 Product product = entry.getKey();
                 Double quantity = entry.getValue();
-                double itemFinalPrice = product.calculateFinalPrice(taxRate);
-                double itemCost = itemFinalPrice * quantity;
+                double itemCost;
+                double itemPricePerUnit;
+
+                if (product instanceof WeightProduct) {
+                    itemCost = ((WeightProduct) product).calculateFinalPrice(taxRate, quantity);
+                    itemPricePerUnit = itemCost / quantity;
+                } else {
+                    itemPricePerUnit = product.calculateFinalPrice(taxRate);
+                    itemCost = itemPricePerUnit * quantity;
+                }
 
                 receipt += product.getName() + "\n" + "  " + String.format("%.2f", quantity) + " х "
-                + String.format("%.2f", itemFinalPrice) + " грн = " + String.format("%.2f", itemCost) + " грн\n";
+                        + String.format("%.2f", itemPricePerUnit) + " грн = " + String.format("%.2f", itemCost) + " грн\n";
             }
         } else {
             receipt += "Кошик порожній.\n";

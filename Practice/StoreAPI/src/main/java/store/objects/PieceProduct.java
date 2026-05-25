@@ -61,7 +61,7 @@ public class PieceProduct extends Product
             LocalDate finalExpiryDate = prodDate.plusDays(this.getShelfLifeDays());
             LocalDate openedExpiryDate = currentDate.plusDays(this.shelfLifeAfterOpeningDays);
             LocalDate realExpiryDate = finalExpiryDate.isBefore(openedExpiryDate) ? finalExpiryDate : openedExpiryDate;
-            return realExpiryDate.toString();
+            return realExpiryDate.format(formatter);
         }
         catch (Exception ex)
         {
