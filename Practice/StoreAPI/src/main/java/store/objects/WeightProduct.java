@@ -43,13 +43,13 @@ public class WeightProduct extends Product
             this.productGrade = productGrade;
     }
 
-    public double calculateCostByWeight() {
-        return getPrice() * this.weightKg;
+    public double calculateCostByWeight(double actualWeightKg) {
+        if (this.weightKg <= 0 || actualWeightKg <= 0) return 0.0;
+        return getPrice() * (actualWeightKg / this.weightKg);
     }
 
     public double calculateOrganicPremium(double basePrice) {
         if (!this.isOrganic) return 0.0;
-
         double organicPremiumRate = 0.15;
         return basePrice * organicPremiumRate;
     }
@@ -57,23 +57,21 @@ public class WeightProduct extends Product
     public double calculateFinalPrice(double taxRate, double actualWeightKg) {
         if (actualWeightKg <= 0) return 0.0;
 
-        double priceForBaseWeight = super.calculateFinalPrice(taxRate);
-        priceForBaseWeight += calculateOrganicPremium(priceForBaseWeight);
+        double pureCost = calculateCostByWeight(actualWeightKg);
+        double costWithDiscount = pureCost * (1.0 - getDiscount());
+        double costWithTax = costWithDiscount + (costWithDiscount * taxRate);
+        costWithTax += calculateOrganicPremium(costWithTax);
 
-        double priceRatio = actualWeightKg / this.weightKg;
-        double totalCost = priceForBaseWeight * priceRatio;
-
-        if (actualWeightKg >= 5.0)
-        {
-            totalCost = totalCost * (1.0 - WHOLESALE_DISCOUNT);
+        if (actualWeightKg >= 5.0) {
+            costWithTax = costWithTax * (1.0 - WHOLESALE_DISCOUNT);
         }
-        if (this.isSoft)
-        {
+
+        if (this.isSoft) {
             double protectiveBoxPrice = 12.50;
-            totalCost += protectiveBoxPrice;
+            costWithTax += protectiveBoxPrice;
         }
 
-        return totalCost;
+        return costWithTax;
     }
 
     @Override

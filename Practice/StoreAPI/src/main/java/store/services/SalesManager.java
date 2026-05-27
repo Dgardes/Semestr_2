@@ -3,9 +3,6 @@ package store.services;
 import store.objects.Product;
 import store.objects.RestrictedProduct;
 import store.objects.WeightProduct;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 public class SalesManager
@@ -21,7 +18,6 @@ public class SalesManager
         this.logBuilder = logBuilder;
         this.catalog = null;
     }
-
 
     public boolean scanAndAddProduct(int productCode, double quantity, int customerAge) {
         if (quantity <= 0) return false;
@@ -47,8 +43,7 @@ public class SalesManager
         return true;
     }
 
-    public void removeProductFromCart(Product product, double quantity)
-    {
+    public void removeProductFromCart(Product product, double quantity) {
         currentCart.removeProduct(product, quantity);
     }
 
@@ -258,4 +253,28 @@ public class SalesManager
     public Map<Product, Double> getCatalog() {
         return catalog;
     }
+
+    public FileManager getFileManager() {
+        return this.fileManager;
+    }
+    //
+    // методи для читання звітів
+    //
+
+    public String readReceiptFile(String date, int receiptNumber) {
+        return fileManager.readReceiptFile(date, receiptNumber);
+    }
+
+    public String readDailySummaryReport(String date) {
+        return fileManager.readDailySummaryReport(date);
+    }
+
+    public String readWasteReportFile(String date) {
+        return fileManager.readWasteReportFile(date);
+    }
+
+    public String readRevisionReportFile(String date) {
+        return fileManager.readRevisionReportFile(date);
+    }
+
 }

@@ -52,9 +52,10 @@ public class RestrictedProduct extends Product
         return finalPrice;
     }
 
-    public double calculatePriceWithoutExcise(double taxRate)
-    {
-        return super.calculateFinalPrice(taxRate);
+    public double calculatePureStoreRevenue(double taxRate, double quantity) {
+        if (quantity <= 0) return 0.0;
+        double pureProductPrice = this.getPrice() * (1.0 - this.getDiscount()) * quantity;
+        return pureProductPrice;
     }
 
     public int calculateMaxAllowedPackages(double singlePackageVolume) {

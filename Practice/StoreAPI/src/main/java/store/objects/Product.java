@@ -126,14 +126,19 @@ public abstract class Product implements Serializable
         }
     }
 
-    public final boolean isCheaperThan(Product otherProduct)
-    {
-        if (otherProduct == null) return false;
-        return this.price < otherProduct.getPrice();
+    public double calculateDiscountAmount(double taxRate) {
+        if (this.discount <= 0.0) {
+            return 0.0;
+        }
+        double fullPriceWithTax = this.price + (this.price * taxRate);
+        double finalPriceWithTax = this.calculateFinalPrice(taxRate);
+
+        double discountAmount = fullPriceWithTax - finalPriceWithTax;
+        return discountAmount > 0.0 ? discountAmount : 0.0;
     }
 
     public String generateInvoiceRow(String currency) {
-        String tempLabel = this.maxStorageTemperature <= 5.0 ? " [Зберігати при низькій температурі]" : "";
+        String tempLabel = this.maxStorageTemperature <= 10.0 ? " [Зберігати при низькій температурі]" : "";
         String row =  "[Код: " + this.code + "] " + this.name + " " + String.format("%.2f", this.price) + " " + currency;
         if(this.discount > 0.0) row += " Знижка: " + String.format("%.2f", this.discount * 100) + "%";
         return  row + tempLabel;

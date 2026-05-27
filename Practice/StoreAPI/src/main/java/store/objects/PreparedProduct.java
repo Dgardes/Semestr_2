@@ -1,5 +1,7 @@
 package store.objects;
 
+import java.time.LocalTime;
+
 public class PreparedProduct extends Product {
     private String chefName;
     private String preparationDepartment;
@@ -61,6 +63,22 @@ public class PreparedProduct extends Product {
         }
     }
 
+    public double calculateEveningMarkdown(double basePrice) {
+        int currentHour = java.time.LocalTime.now().getHour();
+        if (currentHour >= 19 && currentHour <= 23) {
+            double eveningDiscount = 0.30;
+            this.setDiscount(eveningDiscount);
+            return basePrice * (1.0 - eveningDiscount);
+        }
+        return basePrice;
+    }
+
+    @Override
+    public double calculateFinalPrice(double taxRate) {
+        double standardPrice = super.calculateFinalPrice(taxRate);
+        return calculateEveningMarkdown(standardPrice);
+    }
+
     public int calculatePortionsPerHour(int chefsCount) {
         if (chefsCount <= 0 || this.cookingTimeMinutes <= 0) return 0;
 
@@ -73,15 +91,11 @@ public class PreparedProduct extends Product {
 
         return (int) totalPortions;
     }
+
     public int calculateCookingTimeForOrder(int portionsCount, int chefsCount) {
         if (portionsCount <= 0 || chefsCount <= 0) return 0;
         int portionsPerChef = (int) Math.ceil((double) portionsCount / chefsCount);
         return portionsPerChef * this.cookingTimeMinutes;
-    }
-
-    public boolean canFulfillOrderBeforeClose(int portionsCount, int chefsCount, int minutesBeforeClose) {
-        int requiredTime = this.calculateCookingTimeForOrder(portionsCount, chefsCount);
-        return requiredTime <= minutesBeforeClose;
     }
 
     @Override
