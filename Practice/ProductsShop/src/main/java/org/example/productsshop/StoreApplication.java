@@ -11,7 +11,7 @@ public class StoreApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(StoreApplication.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(),1250 ,  850);
+        Scene scene = new Scene(fxmlLoader.load(),1400 ,  850);
         stage.setResizable(false);
         stage.setTitle("Термінал");
         stage.setScene(scene);

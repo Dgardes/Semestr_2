@@ -39,6 +39,12 @@ public class LogBuilder
                 receipt += product.getName() + "\n" + "  " + String.format("%.2f", quantity) + " х "
                         + String.format("%.2f", itemPricePerUnit) + " грн = " + String.format("%.2f", itemCost) + " грн\n";
 
+                double discountPerUnit = product.calculateDiscountAmount(taxRate);
+                if (discountPerUnit > 0) {
+                    double positionDiscount = discountPerUnit * quantity;
+                    receipt += "   [Знижка: -" + String.format("%.2f", positionDiscount) + " грн]\n";
+                }
+
                 //інтеграція методів PieceProduct
                 if (product instanceof store.objects.PieceProduct) {
                     store.objects.PieceProduct pp = (store.objects.PieceProduct) product;

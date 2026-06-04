@@ -131,15 +131,38 @@ public class MainController {
     @FXML
     private TextField inputReceiptNumber;
 
+    @FXML
+    private TextField inputPreparedProductCode;
+
+    @FXML
+    private TextField inputPortionsCount;
+
+    @FXML
+    private TextField inputShiefsCount;
+
+    @FXML
+    private Label lblPreparedProductName;
+
+    @FXML
+    private TextField inputActionProductCode;
+
+    @FXML
+    private Label lblActionProductName;
+
+    @FXML
+    private TextField inputActionDiscount;
+
+    @FXML
+    private TextField inputActionWaste;
+
+    @FXML
+    private TextField inputVolume;
+
     //
     // Методи
     //
 
-    //
-    //
-    // Таб 1
-    //
-    //
+
     @FXML
     public void initialize() {
 
@@ -192,6 +215,11 @@ public class MainController {
             }
         });
 
+        inputVolume.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*(\\.\\d*)?")) {
+                inputVolume.setText(oldValue);
+            }
+        });
 
 
         javafx.scene.control.ToggleGroup productTypeGroup = new javafx.scene.control.ToggleGroup();
@@ -210,7 +238,78 @@ public class MainController {
             }
         });
 
+        //
+        // лісенери для табів 2 та 3 для предпросмотру продукту
+        //
+
+        inputPreparedProductCode.textProperty().addListener((observable, oldValue, newValue) -> {
+            String codeStr = newValue.trim();
+
+            if (codeStr.isEmpty()) {
+                lblPreparedProductName.setText("---");
+                return;
+            }
+
+            try {
+                int code = Integer.parseInt(codeStr);
+                Map<Product, Double> catalog = salesManager.getCatalog();
+
+                if (catalog != null) {
+                    store.objects.PreparedProduct foundProduct = null;
+                    for (Product p : catalog.keySet()) {
+                        if (p.getCode() == code && p instanceof store.objects.PreparedProduct) {
+                            foundProduct = (store.objects.PreparedProduct) p;
+                            break;
+                        }
+                    }
+
+                    if (foundProduct != null) {
+                        lblPreparedProductName.setText(foundProduct.getName());
+                    } else {
+                        lblPreparedProductName.setText("---");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                lblPreparedProductName.setText("---");
+            }
+        });
+
+        inputActionProductCode.textProperty().addListener((observable, oldValue, newValue) -> {
+            String codeStr = newValue.trim();
+            if (codeStr.isEmpty()) {
+                lblActionProductName.setText("---");
+                return;
+            }
+            try {
+                int code = Integer.parseInt(codeStr);
+                Map<Product, Double> catalog = salesManager.getCatalog();
+                if (catalog != null) {
+                    Product foundProduct = null;
+                    for (Product p : catalog.keySet()) {
+                        if (p.getCode() == code) {
+                            foundProduct = p;
+                            break;
+                        }
+                    }
+                    if (foundProduct != null) {
+                        lblActionProductName.setText(foundProduct.getName());
+                    } else {
+                        lblActionProductName.setText("---");
+                    }
+                }
+            } catch (NumberFormatException e) {
+                lblActionProductName.setText("---");
+            }
+        });
+
+
     }
+
+    //
+    //
+    // Таб 1
+    //
+    //
 
     private void clearInfoLabels() {
         lblInfoName.setText("---");
@@ -251,14 +350,11 @@ public class MainController {
             // Визначаємо тип продукту
             if (foundProduct instanceof store.objects.WeightProduct) {
                 lblInfoType.setText("Ваговий (кг)");
-            }
-            else if (foundProduct instanceof store.objects.RestrictedProduct) {
+            } else if (foundProduct instanceof store.objects.RestrictedProduct) {
                 lblInfoType.setText("З обмеженнями");
-            }
-            else if (foundProduct instanceof store.objects.PreparedProduct) {
+            } else if (foundProduct instanceof store.objects.PreparedProduct) {
                 lblInfoType.setText("Власна кухня");
-            }
-            else {
+            } else {
                 lblInfoType.setText("Штучний");
             }
 
@@ -267,8 +363,7 @@ public class MainController {
             } else {
                 lblInfoRestrictions.setText("Немає");
             }
-        }
-        else {
+        } else {
             lblInfoName.setText("---");
             lblWarning.setText("Попередження: Товар з кодом " + code + " не знайдено!");
             clearInfoLabelsExceptName();
@@ -282,6 +377,7 @@ public class MainController {
         String codeStr = inputProductCode.getText().trim();
         String qtyStr = inputQuantity.getText().trim();
         String ageStr = inputAge.getText().trim();
+        String volStr = inputVolume.getText().trim();
 
         if (codeStr.isEmpty() || qtyStr.isEmpty()) {
             lblWarning.setText("Попередження: Заповніть Код та Кількість");
@@ -291,6 +387,7 @@ public class MainController {
         int code = Integer.parseInt(codeStr);
         double quantity = Double.parseDouble(qtyStr.replace(",", "."));
         int age = ageStr.isEmpty() ? 0 : Integer.parseInt(ageStr);
+        double volume = volStr.isEmpty() ? 0.0 : Double.parseDouble(volStr.replace(",", "."));
 
         Product stockProduct = null;
         Map<Product, Double> catalog = salesManager.getCatalog();
@@ -309,19 +406,34 @@ public class MainController {
             return;
         }
 
-        //додаємо в кошик
+        //контроль продукту з обмеженнями
+        if (stockProduct instanceof store.objects.RestrictedProduct) {
+            store.objects.RestrictedProduct rp = (store.objects.RestrictedProduct) stockProduct;
+
+            if (volume <= 0.0) {
+                lblWarning.setText("Помилка: Введіть об'єм однієї одиниці (пляшки/пачки)");
+                return;
+            }
+
+            //перевірка
+            int maxPackages = rp.calculateMaxAllowedPackages(volume);
+
+            if (quantity > maxPackages) {
+                lblWarning.setText(String.format("Перевищено ліміт. Дозволено не більше %d шт. (по %.2f л/кг)", maxPackages, volume));
+                return;
+            }
+        }
+
+        // додаємо в кошик з перевіркою віку
         boolean success = salesManager.scanAndAddProduct(code, quantity, age);
 
         if (success) {
             double positionTotal = 0.0;
 
-            if (stockProduct instanceof store.objects.WeightProduct)
-            {
+            if (stockProduct instanceof store.objects.WeightProduct) {
                 store.objects.WeightProduct wp = (store.objects.WeightProduct) stockProduct;
                 positionTotal = wp.calculateFinalPrice(TAX_RATE, quantity);
-            }
-            else
-            {
+            } else {
                 double finalUnitPrice = stockProduct.calculateFinalPrice(TAX_RATE);
                 positionTotal = finalUnitPrice * quantity;
             }
@@ -335,7 +447,14 @@ public class MainController {
 
             inputProductCode.clear();
             inputQuantity.clear();
+            inputVolume.clear();
             clearInfoLabels();
+        } else {
+            if (stockProduct instanceof store.objects.RestrictedProduct) {
+                lblWarning.setText("Продаж заборонено: Покупець неповнолітній!");
+            } else {
+                lblWarning.setText("Помилка додавання: Недостатньо товару на складі.");
+            }
         }
     }
 
@@ -414,8 +533,7 @@ public class MainController {
 
     private void updateCartTotalSum(double taxRate) {
         store.services.Cart currentCart = salesManager.getCurrentCart();
-        if (currentCart != null)
-        {
+        if (currentCart != null) {
             double total = currentCart.calculateTotalCartCost(taxRate);
             lblTotalSum.setText(String.format("Всього: %.2f грн", total));
         } else {
@@ -456,15 +574,69 @@ public class MainController {
     @FXML
     private void onPerformWasteInspectionClick() {
         String date = getAdminInputDate();
+        String oldReport = "";
+
         try {
-            salesManager.performWasteInspection(date);
-            txtAdminLogArea.setText("=== СИСТЕМНИЙ ЛОГ ===\n" +
-                    "Успішно виконано ревізію прострочки за дату: " + date + "\n" +
-                    "Файл звіту успішно згенеровано та збережено.\n\n" +
-                    "=== ВМІСТ ФАЙЛУ ===\n" +
-                    fileManager.readWasteReportFile(date)); // Викликаємо локальний fileManager напрямую!
+            oldReport = salesManager.readWasteReportFile(date);
+            if (oldReport.startsWith("Файл не знайдено:")) {
+                oldReport = "";
+            }
         } catch (Exception e) {
-            txtAdminLogArea.setText("Помилка списання: " + e.getMessage());
+            oldReport = "";
+        }
+
+        try {
+            //рахуємо скільки прострочених позицій є на складі до виклику інспекції
+            long expiredCount = 0;
+            Map<Product, Double> catalog = salesManager.getCatalog();
+            if (catalog != null) {
+                expiredCount = catalog.entrySet().stream()
+                .filter(entry -> entry.getKey() != null && entry.getKey().isExpired() && entry.getValue() > 0)
+                .count();
+            }
+            salesManager.performWasteInspection(date);
+            String newReport = salesManager.readWasteReportFile(date);
+
+            //склеюємо тільки якщо реально було що списувати
+            if (!oldReport.isEmpty() && expiredCount > 0 && !newReport.contains("Прострочених товарів під час перевірки не виявлено")) {
+
+                String cleanNewReport = newReport.replace(
+            "================================================================================\n" +
+                  "                             Звіт списання товарів                              \n" +
+                  "================================================================================\n" +
+                  "Дата формування: " + date + "\n" +
+                  "--------------------------------------------------------------------------------\n", "");
+
+                String combinedText = oldReport + "\n[Додаткова інспекція за сьогодні]\n" + cleanNewReport;
+
+                String dirPath = "store_data/Звіти/Списання";
+                java.io.File dir = new java.io.File(dirPath);
+                if (!dir.exists()) dir.mkdirs();
+
+                try (java.io.BufferedWriter writer = new java.io.BufferedWriter(new java.io.FileWriter(dirPath + "/Звіт_списання_за_" + date + ".txt"))) {
+                    writer.write(combinedText);
+                }
+
+                txtAdminLogArea.setText(combinedText);
+            } else {
+                txtAdminLogArea.setText(oldReport.isEmpty() ? newReport : oldReport);
+            }
+
+        } catch (RuntimeException e) {
+            if (e.getCause() instanceof java.io.FileNotFoundException) {
+                txtAdminLogArea.setText(
+                "Проведення авто списання простроченого товару\n" +
+                "Дата: " + date + "\n" +
+                "----------------------------------------------------\n" +
+                "Результат: Прострочених товарів на складі не виявлено.\n" +
+                "Файл звіту не створювався.\n" +
+                "----------------------------------------------------"
+                );
+            } else {
+                txtAdminLogArea.setText("Помилка списання: " + e.getMessage());
+            }
+        } catch (Exception e) {
+            txtAdminLogArea.setText("Критична помилка: " + e.getMessage());
         }
     }
 
@@ -473,35 +645,40 @@ public class MainController {
         String date = getAdminInputDate();
         try {
             salesManager.closeDailyShift(date);
-            txtAdminLogArea.setText("=== СИСТЕМНИЙ ЛОГ ===\n" +
-                    "Зміну успешно закрито за дату: " + date + "\n" +
-                    "Фінансовий підсумок дня записано на диск.\n\n" +
-                    "=== ВМІСТ ФАЙЛУ ===\n" +
-                    fileManager.readDailySummaryReport(date)); // Викликаємо локальний fileManager напрямую!
+            txtAdminLogArea.setText(salesManager.readDailySummaryReport(date));
         } catch (Exception e) {
             txtAdminLogArea.setText("Помилка закриття зміни: " + e.getMessage());
         }
     }
 
-    // --- ПЕРЕГЛЯД ЗВІТІВ ЗА ВКАЗАНУ ДАТУ ---
+    @FXML
+    private void onShowCatalogClick() {
+        Map<Product, Double> catalog = salesManager.getCatalog();
+        if (catalog == null || catalog.isEmpty()) {
+            txtAdminLogArea.setText("Склад порожній або дані не завантажено.");
+            return;
+        }
+
+        //генеруємо чистий звіт ревізії складу
+        String date = getAdminInputDate();
+        String report = store.services.LogBuilder.generateRevisionReport(catalog, date);
+        txtAdminLogArea.setText(report);
+    }
+
+    // методи перегляду за вказану дату
 
     @FXML
     private void onLoadSalesReportClick() {
-        String date = getAdminInputDate();
-        String text = fileManager.readDailySummaryReport(date); // Прямий виклик
-        txtAdminLogArea.setText(text);
+        txtAdminLogArea.setText(salesManager.readDailySummaryReport(getAdminInputDate()));
     }
 
     @FXML
     private void onLoadWasteReportClick() {
-        String date = getAdminInputDate();
-        String text = fileManager.readWasteReportFile(date); // Прямий виклик
-        txtAdminLogArea.setText(text);
+        txtAdminLogArea.setText(salesManager.readWasteReportFile(getAdminInputDate()));
     }
 
     @FXML
     private void onLoadReceiptClick() {
-        String date = getAdminInputDate();
         String receiptNumStr = inputReceiptNumber.getText().trim();
         if (receiptNumStr.isEmpty()) {
             txtAdminLogArea.setText("Помилка: Введіть номер чеку!");
@@ -509,38 +686,73 @@ public class MainController {
         }
         try {
             int num = Integer.parseInt(receiptNumStr);
-            String text = fileManager.readReceiptFile(date, num); // Прямий виклик
-            txtAdminLogArea.setText(text);
+            txtAdminLogArea.setText(salesManager.readReceiptFile(getAdminInputDate(), num));
         } catch (NumberFormatException e) {
-            txtAdminLogArea.setText("Помилка: Номер чеку має бути числом!");
+            txtAdminLogArea.setText("Помилка: Номер чеку має бути цілим числом!");
         }
-    }
-
-    @FXML
-    private void onShowCatalogClick() {
-        txtAdminLogArea.setText("=== ПОТОЧНИЙ СТАН СКЛАДУ (КАТАЛОГ) ===\n");
-        txtAdminLogArea.appendText("----------------------------------------------------\n");
-
-        Map<Product, Double> catalog = salesManager.getCatalog();
-        if (catalog == null || catalog.isEmpty()) {
-            txtAdminLogArea.appendText("Склад порожній або дані не завантажено.");
-            return;
-        }
-
-        for (Map.Entry<Product, Double> entry : catalog.entrySet()) {
-            Product p = entry.getKey();
-            double stock = entry.getValue();
-            if (p != null) {
-                txtAdminLogArea.appendText(String.format("Код: %-5d | %-20s | Ціна: %7.2f грн | Залишок: %.2f\n",
-                        p.getCode(), p.getName(), p.getPrice(), stock));
-            }
-        }
-        txtAdminLogArea.appendText("----------------------------------------------------\n");
     }
 
     @FXML
     private void onClearAdminLogClick() {
         txtAdminLogArea.clear();
+    }
+
+    // метод аналітики навантаження
+
+    @FXML
+    private void onCalculateWorkloadClick() {
+        try {
+            int code = Integer.parseInt(inputPreparedProductCode.getText().trim());
+            int portions = Integer.parseInt(inputPortionsCount.getText().trim());
+            int chefs = Integer.parseInt(inputShiefsCount.getText().trim());
+
+            // Валідація
+            if (portions <= 0 || chefs <= 0) {
+                txtAdminLogArea.setText("Помилка: Кількість порцій та кухарів має бути більшою за нуль!");
+                return;
+            }
+
+            Map<Product, Double> catalog = salesManager.getCatalog();
+            if (catalog == null) return;
+
+            //пошук страви в каталозі
+            store.objects.PreparedProduct targetProduct = null;
+            for (Product p : catalog.keySet()) {
+                if (p.getCode() == code && p instanceof store.objects.PreparedProduct) {
+                    targetProduct = (store.objects.PreparedProduct) p;
+                    break;
+                }
+            }
+
+            if (targetProduct == null) {
+                lblPreparedProductName.setText("---");
+                txtAdminLogArea.setText("Помилка: Страву власного виробництва з кодом " + code + " не знайдено!");
+                return;
+            }
+
+            // Оновлюємо UI та виконуємо розрахунки методів
+            lblPreparedProductName.setText(targetProduct.getName());
+
+            int timeRequired = targetProduct.calculateCookingTimeForOrder(portions, chefs);
+            int portionsPerHour = targetProduct.calculatePortionsPerHour(chefs);
+
+            String result =
+                    "========================================\n" +
+                            "         Аналітика навантаження         \n" +
+                            "========================================\n" +
+                            "Страва: " + targetProduct.getName() + " (Цех: " + targetProduct.getPreparationDepartment() + ")\n" +
+                            "Замовлення: " + portions + " порцій\n" +
+                            "Працює кухарів: " + chefs + "\n" +
+                            "----------------------------------------\n" +
+                            "Час на приготування замовлення : " + timeRequired + " хв.\n" +
+                            "Продуктивність зміни (за годину): " + portionsPerHour + " порцій\n" +
+                            "========================================\n";
+
+            txtAdminLogArea.setText(result);
+
+        } catch (NumberFormatException e) {
+            txtAdminLogArea.setText("Помилка: Для розрахунку введіть коректні числові значення!");
+        }
     }
 
     //
@@ -619,8 +831,7 @@ public class MainController {
             //перевірка
             if (name.isEmpty() || priceStr.isEmpty() || discountStr.isEmpty() ||
                     productionDate.isEmpty() || expiryDaysStr.isEmpty() ||
-                    tempMinStr.isEmpty() || tempMaxStr.isEmpty() || supplyQtyStr.isEmpty())
-            {
+                    tempMinStr.isEmpty() || tempMaxStr.isEmpty() || supplyQtyStr.isEmpty()) {
                 txtSupplyLogArea.setText("Помилка:\nВсі базові поля продукту мають бути заповнені!\n" +
                         "(Включаючи Знижку, Дату, Термін, Температуру та Кількість)");
                 return;
@@ -656,17 +867,15 @@ public class MainController {
 
                 newProduct = new store.objects.PieceProduct(code, price, name, discount, productionDate,
                         shelfLifeDays, minTemp, maxTemp, pkgWeight, pkgMaterial, fragile, openingDays);
-            }
-            else if (radioWeight.isSelected()) {
+            } else if (radioWeight.isSelected()) {
                 double weightKg = inputSubField1.getText().isEmpty() ? 1.0 : Double.parseDouble(inputSubField1.getText().trim().replace(",", "."));
                 String grade = inputSubField2.getText().isEmpty() ? "Вищий" : inputSubField2.getText().trim();
                 boolean organic = inputSubField3.getText().isEmpty() ? false : parseBooleanStrict(inputSubField3.getText());
                 boolean soft = inputSubField4.getText().isEmpty() ? false : parseBooleanStrict(inputSubField4.getText());
 
                 newProduct = new store.objects.WeightProduct(code, price, name, discount, productionDate,
-                        shelfLifeDays, minTemp, maxTemp, weightKg, grade, organic, soft );
-            }
-            else if (radioRestricted.isSelected()) {
+                        shelfLifeDays, minTemp, maxTemp, weightKg, grade, organic, soft);
+            } else if (radioRestricted.isSelected()) {
                 int minAge = inputSubField1.getText().isEmpty() ? 18 : Integer.parseInt(inputSubField1.getText().trim());
                 boolean requiresExcise = inputSubField2.getText().isEmpty() ? true : parseBooleanStrict(inputSubField2.getText());
                 double maxVolume = inputSubField3.getText().isEmpty() ? 2.0 : Double.parseDouble(inputSubField3.getText().trim().replace(",", "."));
@@ -674,8 +883,7 @@ public class MainController {
 
                 newProduct = new store.objects.RestrictedProduct(code, price, name, discount, productionDate,
                         shelfLifeDays, minTemp, maxTemp, minAge, requiresExcise, maxVolume, highValue);
-            }
-            else if (radioCustom.isSelected()) {
+            } else if (radioCustom.isSelected()) {
                 String chefName = inputSubField1.getText().isEmpty() ? "Кухар" : inputSubField1.getText().trim();
                 String department = inputSubField2.getText().isEmpty() ? "Кухня" : inputSubField2.getText().trim();
                 boolean isHot = inputSubField3.getText().isEmpty() ? false : parseBooleanStrict(inputSubField3.getText());
@@ -742,6 +950,130 @@ public class MainController {
 
         txtSupplyLogArea.clear();
         updateSubFieldsLabels("Штучний");
+    }
+
+    @FXML
+    private void onApplyDiscountClick() {
+        try {
+            int code = Integer.parseInt(inputActionProductCode.getText().trim());
+            double discountInput = Double.parseDouble(inputActionDiscount.getText().trim().replace(",", "."));
+
+            if (discountInput < 0.0 || discountInput >= 100.0) {
+                txtSupplyLogArea.setText("Помилка: Знижка має бути в межах від 0.0 до 0.99");
+                return;
+            }
+
+            Map<Product, Double> catalog = salesManager.getCatalog();
+            if (catalog == null || catalog.isEmpty()) return;
+
+            Product targetProduct = null;
+            for (Product p : catalog.keySet()) {
+                if (p.getCode() == code) {
+                    targetProduct = p;
+                    break;
+                }
+            }
+
+            if (targetProduct != null) {
+                double oldDiscountPercent = targetProduct.getDiscount() * 100;
+
+                if (discountInput >= 1.0) {
+                    int extraDiscountPercent = (int) discountInput;
+                    targetProduct.applyExtraDiscount(extraDiscountPercent);
+                } else {
+                    double discountInMoney = discountInput * targetProduct.getPrice();
+                    targetProduct.applyExtraDiscount(discountInMoney);
+                }
+
+                salesManager.saveStoreData();
+
+                double newDiscountPercent = targetProduct.getDiscount() * 100;
+                txtSupplyLogArea.setText(
+                "До товару '" + targetProduct.getName() + "' додано додаткову знижку.\n" +
+                "----------------------------------------\n" +
+                "Попередня знижка : " + String.format("%.0f", oldDiscountPercent) + "%\n" +
+                "Введена надбавка  : " + (discountInput >= 1.0 ? discountInput + "%" : String.format("%.0f", discountInput * 100) + "%") + "\n" +
+                "Нова сумарна знижка: " + String.format("%.0f", newDiscountPercent) + "%\n" +
+                "----------------------------------------");
+
+                inputActionDiscount.clear();
+            } else {
+                txtSupplyLogArea.setText("Помилка: Товар з кодом " + code + " не знайдено");
+            }
+        } catch (NumberFormatException e) {
+            txtSupplyLogArea.setText("Помилка: Перевірте правильність введеного коду або знижки.");
+        }
+    }
+
+    @FXML
+    private void onManualWasteClick() {
+        try {
+            int code = Integer.parseInt(inputActionProductCode.getText().trim());
+            double wasteQty = Double.parseDouble(inputActionWaste.getText().trim().replace(",", "."));
+
+            if (wasteQty <= 0) {
+                txtSupplyLogArea.setText("Помилка: Кількість для списання має бути більше 0");
+                return;
+            }
+
+            Map<Product, Double> catalog = salesManager.getCatalog();
+            if (catalog == null || catalog.isEmpty()) return;
+
+            Product targetProduct = null;
+            double currentStock = 0;
+
+            for (Map.Entry<Product, Double> entry : catalog.entrySet()) {
+                if (entry.getKey().getCode() == code) {
+                    targetProduct = entry.getKey();
+                    currentStock = entry.getValue();
+                    break;
+                }
+            }
+
+            if (targetProduct != null) {
+                double newStock = currentStock - wasteQty;
+
+
+                if (newStock <= 0) {
+                    newStock = 0.0;
+                }
+
+                catalog.put(targetProduct, newStock);
+                salesManager.saveStoreData();
+
+                txtSupplyLogArea.setText("Товар успішно списано" + "\nНовий залишок на складі: " + newStock);
+                inputActionWaste.clear();
+            } else {
+                txtSupplyLogArea.setText("Помилка: Товар з кодом " + code + " не знайдено!");
+            }
+        } catch (NumberFormatException e) {
+            txtSupplyLogArea.setText("Помилка: Перевірте правильність введеного коду або кількості.");
+        }
+    }
+
+    @FXML
+    private void onDeleteFromCatalogClick() {
+        try {
+            int code = Integer.parseInt(inputActionProductCode.getText().trim());
+
+            String productName = lblActionProductName.getText();
+            if (productName.equals("---")) {
+                txtSupplyLogArea.setText("Помилка: Товар з кодом " + code + " не існує в базі!");
+                return;
+            }
+
+            salesManager.removeProductFromCatalog(code);
+
+            txtSupplyLogArea.setText("Товар '" + productName + "' (Код: " + code + ") видалено з каталогу");
+
+            inputActionProductCode.clear();
+            inputActionDiscount.clear();
+            inputActionWaste.clear();
+            lblActionProductName.setText("---");
+
+        } catch (NumberFormatException e) {
+            txtSupplyLogArea.setText("Помилка: Введіть коректний числовий код товару.");
+        }
     }
 
     //

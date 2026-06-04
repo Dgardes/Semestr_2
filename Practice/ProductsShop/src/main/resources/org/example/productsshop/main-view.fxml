@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="ContentPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0" prefWidth="1250.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.productsshop.MainController">
+<Pane fx:id="ContentPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.productsshop.MainController">
     <children>
-        <TabPane layoutX="0.0" layoutY="0.0" prefHeight="850.0" prefWidth="1250.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="50.0" tabMaxWidth="380.0" tabMinHeight="50.0" tabMinWidth="380.0">
+        <TabPane layoutX="0.0" layoutY="0.0" prefHeight="850.0" prefWidth="1400.0" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="50.0" tabMaxWidth="380.0" tabMinHeight="50.0" tabMinWidth="380.0">
             <tabs>
 
                 <Tab text="Режим Каси">
@@ -50,14 +50,14 @@
                                     <font><Font size="25.0" /></font>
                                 </Button>
 
-                                <Button layoutX="794.0" layoutY="709.0" onAction="#onCheckoutClick" prefHeight="70.0" prefWidth="419.0" text="Оплатити чек">
+                                <Button layoutX="794.0" layoutY="709.0" onAction="#onCheckoutClick" prefHeight="70.0" prefWidth="571.0" text="Оплатити чек">
                                     <font><Font name="System Bold" size="25.0" /></font>
                                 </Button>
 
-                                <Label layoutX="793.0" layoutY="35.0" text="Вміст поточного кошика покупця:">
+                                <Label layoutX="870.0" layoutY="36.0" text="Вміст поточного кошика покупця:">
                                     <font><Font name="System Bold" size="25.0" /></font>
                                 </Label>
-                                <ListView fx:id="cartListView" layoutX="794.0" layoutY="80.0" prefHeight="567.0" prefWidth="419.0" style="-fx-font-size: 20px; -fx-font-family: 'Courier New';" />
+                                <ListView fx:id="cartListView" layoutX="794.0" layoutY="80.0" prefHeight="567.0" prefWidth="568.0" style="-fx-font-size: 20px; -fx-font-family: 'Courier New';" />
 
                                 <Pane layoutX="45.0" layoutY="340.0" prefHeight="349.0" prefWidth="643.0" style="-fx-background-color: white;">
                                     <children>
@@ -102,6 +102,16 @@
                               <Font name="System Bold" size="25.0" />
                            </font>
                         </Label>
+                        <Label layoutX="392.0" layoutY="159.0" prefHeight="45.0" prefWidth="384.0" text="Об'єм / кількість прод. з обмеж.">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="inputVolume" layoutX="392.0" layoutY="208.0" prefHeight="55.0" prefWidth="300.0">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </TextField>
                             </children></AnchorPane>
                     </content>
                 </Tab>
@@ -110,61 +120,147 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1250.0">
                             <children>
-                                <Label layoutX="45.0" layoutY="35.0" prefHeight="36.0" prefWidth="319.0" text="Створення звітів та дії:">
+
+                                <Label layoutX="839.0" layoutY="44.0" text="Консоль звітів та системних логів:">
                                     <font><Font name="System Bold" size="25.0" /></font>
                                 </Label>
+                                <TextArea fx:id="txtAdminLogArea" layoutX="724.0" layoutY="130.0" prefHeight="651.0" prefWidth="649.0" style="-fx-font-size: 18px; -fx-font-family: 'Courier New';" />
 
-                                <Button layoutX="45.0" layoutY="90.0" onAction="#onShowCatalogClick" prefHeight="55.0" prefWidth="320.0" text="Показати склад">
+                                <Button layoutX="889.0" layoutY="79.0" onAction="#onClearAdminLogClick" prefHeight="15.0" prefWidth="321.0" text="Очистити">
                                     <font><Font size="22.0" /></font>
                                 </Button>
-
-                                <Button layoutX="45.0" layoutY="165.0" onAction="#onPerformWasteInspectionClick" prefHeight="55.0" prefWidth="320.0" text="Списати прострочку">
-                                    <font><Font size="22.0" /></font>
-                                </Button>
-
-                                <Button layoutX="45.0" layoutY="240.0" onAction="#onCloseDailyShiftClick" prefHeight="55.0" prefWidth="320.0" text="Закрити зміну">
-                                    <font><Font size="22.0" /></font>
-                                </Button>
-
-                                <Label layoutX="45.0" layoutY="340.0" text="Перегляд звітів:">
-                                    <font><Font name="System Bold" size="25.0" /></font>
-                                </Label>
-
-                                <Label layoutX="45.0" layoutY="390.0" text="Дата звіту:">
-                                    <font><Font size="20.0" /></font>
-                                </Label>
-
-                                <Button layoutX="44.0" layoutY="624.0" onAction="#onLoadReceiptClick" prefHeight="55.0" prefWidth="321.0" text="Фіскальний чек">
-                                    <font><Font size="22.0" /></font>
-                                </Button>
-
-                                <Label layoutX="726.0" layoutY="27.0" text="Консоль звітів та системних логів:">
-                                    <font><Font name="System Bold" size="25.0" /></font>
-                                </Label>
-                                <TextArea fx:id="txtAdminLogArea" layoutX="660.0" layoutY="114.0" prefHeight="663.0" prefWidth="552.0" style="-fx-font-size: 18px; -fx-font-family: 'Courier New';" />
-
-                                <TextField fx:id="inputReportDate" layoutX="45.0" layoutY="434.0" prefHeight="45.0" prefWidth="320.0" promptText="ДД.ММ.РРРР">
-                                    <font><Font size="20.0" /></font>
-                                </TextField>
-
-                                <Label layoutX="44.0" layoutY="688.0" text="Номер чеку:">
-                                    <font><Font size="20.0" /></font>
-                                </Label>
-                                <TextField fx:id="inputReceiptNumber" layoutX="44.0" layoutY="732.0" prefHeight="45.0" prefWidth="320.0">
-                                    <font><Font size="20.0" /></font>
-                                </TextField>
-
-                                <Button layoutX="44.0" layoutY="556.0" onAction="#onLoadWasteReportClick" prefHeight="55.0" prefWidth="321.0" text="Звіт списання товарів">
-                                    <font><Font size="22.0" /></font>
-                                </Button>
-
-                                <Button layoutX="45.0" layoutY="492.0" onAction="#onLoadSalesReportClick" prefHeight="55.0" prefWidth="321.0" text="Звіт з продажів">
-                                    <font><Font size="22.0" /></font>
-                                </Button>
-
-                                <Button layoutX="776.0" layoutY="62.0" onAction="#onClearAdminLogClick" prefHeight="15.0" prefWidth="321.0" text="Очистити">
-                                    <font><Font size="22.0" /></font>
-                                </Button>
+                        <Pane layoutX="26.0" layoutY="49.0" prefHeight="271.0" prefWidth="331.0" style="-fx-background-color: White;">
+                           <children>
+                                      <Label layoutX="5.0" layoutY="4.0" prefHeight="36.0" prefWidth="319.0" text="Створення звітів та дії:">
+                                          <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                                      </Label>
+      
+                                      <Button layoutX="5.0" layoutY="59.0" onAction="#onShowCatalogClick" prefHeight="55.0" prefWidth="320.0" text="Показати склад">
+                                          <font>
+                                    <Font size="22.0" />
+                                 </font>
+                                      </Button>
+      
+                                      <Button layoutX="5.0" layoutY="134.0" onAction="#onPerformWasteInspectionClick" prefHeight="55.0" prefWidth="320.0" text="Списати прострочку">
+                                          <font>
+                                    <Font size="22.0" />
+                                 </font>
+                                      </Button>
+      
+                                      <Button layoutX="5.0" layoutY="209.0" onAction="#onCloseDailyShiftClick" prefHeight="55.0" prefWidth="320.0" text="Закрити зміну">
+                                          <font>
+                                    <Font size="22.0" />
+                                 </font>
+                                      </Button>
+                           </children>
+                        </Pane>
+                        <Pane layoutX="26.0" layoutY="327.0" prefHeight="454.0" prefWidth="331.0" style="-fx-background-color: white;">
+                           <children>
+      
+                                      <Label layoutX="6.0" layoutY="6.0" text="Перегляд звітів:">
+                                          <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                                      </Label>
+      
+                                      <Label layoutX="6.0" layoutY="56.0" text="Дата звіту:">
+                                          <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                      </Label>
+      
+                                      <Button layoutX="5.0" layoutY="290.0" onAction="#onLoadReceiptClick" prefHeight="55.0" prefWidth="321.0" text="Фіскальний чек">
+                                          <font>
+                                    <Font size="22.0" />
+                                 </font>
+                                      </Button>
+      
+                                      <TextField fx:id="inputReportDate" layoutX="6.0" layoutY="100.0" prefHeight="45.0" prefWidth="320.0" promptText="ДД.ММ.РРРР">
+                                          <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                      </TextField>
+      
+                                      <Label layoutX="5.0" layoutY="354.0" text="Номер чеку:">
+                                          <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                      </Label>
+                                      <TextField fx:id="inputReceiptNumber" layoutX="5.0" layoutY="398.0" prefHeight="45.0" prefWidth="320.0">
+                                          <font>
+                                    <Font size="20.0" />
+                                 </font>
+                                      </TextField>
+      
+                                      <Button layoutX="5.0" layoutY="222.0" onAction="#onLoadWasteReportClick" prefHeight="55.0" prefWidth="321.0" text="Звіт списання товарів">
+                                          <font>
+                                    <Font size="22.0" />
+                                 </font>
+                                      </Button>
+      
+                                      <Button layoutX="6.0" layoutY="158.0" onAction="#onLoadSalesReportClick" prefHeight="55.0" prefWidth="321.0" text="Звіт з продажів">
+                                          <font>
+                                    <Font size="22.0" />
+                                 </font>
+                                      </Button>
+                           </children>
+                        </Pane>
+                        <Pane layoutX="378.0" layoutY="49.0" prefHeight="440.0" prefWidth="335.0" style="-fx-background-color: white;">
+                           <children>
+                              <Label layoutX="5.0" layoutY="2.0" prefHeight="36.0" prefWidth="319.0" text="Аналітика">
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="inputPreparedProductCode" layoutX="5.0" layoutY="93.0" prefHeight="45.0" prefWidth="320.0">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </TextField>
+                              <Label layoutX="5.0" layoutY="63.0" prefHeight="30.0" prefWidth="333.0" text="Код товару власного виробництва:">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="inputPortionsCount" layoutX="5.0" layoutY="246.0" prefHeight="45.0" prefWidth="320.0">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </TextField>
+                              <Label layoutX="5.0" layoutY="216.0" prefHeight="30.0" prefWidth="193.0" text="Кількість порцій:">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="inputShiefsCount" layoutX="5.0" layoutY="327.0" prefHeight="45.0" prefWidth="320.0">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </TextField>
+                              <Label layoutX="5.0" layoutY="297.0" text="Кількість кухарів:">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="5.0" layoutY="151.0" prefHeight="30.0" prefWidth="71.0" text="Назва:">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblPreparedProductName" layoutX="83.0" layoutY="151.0" prefHeight="30.0" prefWidth="244.0" text="---">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <Button layoutX="5.0" layoutY="386.0" onAction="#onCalculateWorkloadClick" prefHeight="46.0" prefWidth="320.0" text="Розрахувати навантаження">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </Pane>
                             </children>
                         </AnchorPane>
                     </content>
@@ -172,142 +268,191 @@
 
                 <Tab text="Поповнення складу і робота з товарами">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1250.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="800.0" prefWidth="1400.0">
                             <children>
-                                <Label layoutX="47.0" layoutY="17.0" text="Реєстрація та надходження:">
+                                <Label layoutX="11.0" layoutY="17.0" text="Реєстрація та надходження:">
                                     <font><Font name="System Bold" size="25.0" /></font>
                                 </Label>
 
-                                <Button layoutX="405.0" layoutY="704.0" onAction="#onAcceptSupplyClick" prefHeight="65.0" prefWidth="320.0" text="Прийняти на склад">
+                                <Button layoutX="352.0" layoutY="706.0" onAction="#onAcceptSupplyClick" prefHeight="65.0" prefWidth="272.0" text="Прийняти на склад">
                                     <font><Font size="22.0" /></font>
                                 </Button>
 
-                                <Label layoutX="770.0" layoutY="17.0" text="Консоль звітів та системних логів:">
+                                <Label layoutX="947.0" layoutY="12.0" text="Консоль звітів та системних логів:">
                                     <font><Font name="System Bold" size="25.0" /></font>
                                 </Label>
-                                <TextArea fx:id="txtSupplyLogArea" editable="false" layoutX="751.0" layoutY="104.0" prefHeight="665.0" prefWidth="458.0" style="-fx-font-size: 18px; -fx-font-family: 'Courier New';" />
+                                <TextArea fx:id="txtSupplyLogArea" editable="false" layoutX="928.0" layoutY="91.0" prefHeight="680.0" prefWidth="458.0" style="-fx-font-size: 18px; -fx-font-family: 'Courier New';" />
 
-                                <Pane layoutX="45.0" layoutY="93.0" prefHeight="678.0" prefWidth="345.0" style="-fx-background-color: white;">
+                                <Pane layoutX="2.0" layoutY="96.0" prefHeight="675.0" prefWidth="345.0" style="-fx-background-color: white;">
                                     <children>
-                                        <Label layoutX="9.0" layoutY="4.0" text="Код товару:">
+                                        <Label layoutX="9.0" text="Код товару:">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <TextField fx:id="inputSupplyCode" layoutX="9.0" layoutY="34.0" prefHeight="45.0" prefWidth="320.0">
+                                        <TextField fx:id="inputSupplyCode" layoutX="9.0" layoutY="30.0" prefHeight="45.0" prefWidth="320.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
 
-                                        <Label layoutX="9.0" layoutY="83.0" text="Назва товару:">
+                                        <Label layoutX="9.0" layoutY="79.0" text="Назва товару:">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <TextField fx:id="inputSupplyName" layoutX="9.0" layoutY="113.0" prefHeight="45.0" prefWidth="320.0">
+                                        <TextField fx:id="inputSupplyName" layoutX="9.0" layoutY="109.0" prefHeight="45.0" prefWidth="320.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
 
-                                        <Label layoutX="9.0" layoutY="164.0" text="Ціна товару:">
+                                        <Label layoutX="9.0" layoutY="160.0" text="Ціна товару:">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <TextField fx:id="inputSupplyPrice" layoutX="9.0" layoutY="194.0" prefHeight="45.0" prefWidth="320.0">
+                                        <TextField fx:id="inputSupplyPrice" layoutX="9.0" layoutY="190.0" prefHeight="45.0" prefWidth="320.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
 
-                                        <Label layoutX="9.0" layoutY="239.0" text="Знижка:">
+                                        <Label layoutX="9.0" layoutY="235.0" text="Знижка:">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <TextField fx:id="inputSupplyDiscount" layoutX="9.0" layoutY="269.0" prefHeight="45.0" prefWidth="320.0">
+                                        <TextField fx:id="inputSupplyDiscount" layoutX="9.0" layoutY="265.0" prefHeight="45.0" prefWidth="320.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
 
-                                        <Label layoutX="9.0" layoutY="319.0" text="Дата виробництва:">
+                                        <Label layoutX="9.0" layoutY="315.0" text="Дата виробництва:">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <TextField fx:id="inputSupplyDate" layoutX="9.0" layoutY="349.0" prefHeight="45.0" prefWidth="320.0">
+                                        <TextField fx:id="inputSupplyDate" layoutX="9.0" layoutY="345.0" prefHeight="45.0" prefWidth="320.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
 
-                                        <Label layoutX="9.0" layoutY="400.0" text="Кількість днів збереження:">
+                                        <Label layoutX="9.0" layoutY="396.0" text="Кількість днів збереження:">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <TextField fx:id="inputSupplyExpiryDays" layoutX="9.0" layoutY="430.0" prefHeight="45.0" prefWidth="320.0">
+                                        <TextField fx:id="inputSupplyExpiryDays" layoutX="9.0" layoutY="426.0" prefHeight="45.0" prefWidth="320.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
 
-                                        <Label layoutX="9.0" layoutY="480.0" text="Температура збереження:">
+                                        <Label layoutX="9.0" layoutY="476.0" text="Температура збереження:">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <TextField fx:id="inputSupplyTempMin" layoutX="8.0" layoutY="517.0" prefHeight="45.0" prefWidth="139.0">
+                                        <TextField fx:id="inputSupplyTempMin" layoutX="8.0" layoutY="513.0" prefHeight="45.0" prefWidth="139.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
-                                        <TextField fx:id="inputSupplyTempMax" layoutX="190.0" layoutY="517.0" prefHeight="45.0" prefWidth="139.0">
+                                        <TextField fx:id="inputSupplyTempMax" layoutX="190.0" layoutY="513.0" prefHeight="45.0" prefWidth="139.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
 
-                                        <Label layoutX="8.0" layoutY="563.0" text="Min">
+                                        <Label layoutX="8.0" layoutY="559.0" text="Min">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <Label layoutX="190.0" layoutY="563.0" text="Max">
+                                        <Label layoutX="190.0" layoutY="559.0" text="Max">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <Label layoutX="9.0" layoutY="597.0" text="Кількість">
+                                        <Label layoutX="9.0" layoutY="593.0" text="Кількість">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <TextField fx:id="supplyQuantity" layoutX="9.0" layoutY="627.0" prefHeight="45.0" prefWidth="320.0">
+                                        <TextField fx:id="supplyQuantity" layoutX="9.0" layoutY="623.0" prefHeight="45.0" prefWidth="320.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
                                     </children>
                                 </Pane>
 
-                                <Label layoutX="47.0" layoutY="62.0" text="Обов'язкові дані">
+                                <Label layoutX="11.0" layoutY="62.0" text="Обов'язкові дані">
                                     <font><Font name="System Bold" size="25.0" /></font>
                                 </Label>
 
-                                <Pane layoutX="392.0" layoutY="328.0" prefHeight="323.0" prefWidth="345.0" style="-fx-background-color: white;">
+                                <Pane layoutX="353.0" layoutY="328.0" prefHeight="369.0" prefWidth="269.0" style="-fx-background-color: white;">
                                     <children>
                                         <Label fx:id="lblSubField1" layoutX="9.0" layoutY="4.0" text="Поле класу 1">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <TextField fx:id="inputSubField1" layoutX="9.0" layoutY="34.0" prefHeight="45.0" prefWidth="320.0">
+                                        <TextField fx:id="inputSubField1" layoutX="9.0" layoutY="34.0" prefHeight="45.0" prefWidth="250.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
 
                                         <Label fx:id="lblSubField2" layoutX="9.0" layoutY="83.0" text="Поле класу 2">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <TextField fx:id="inputSubField2" layoutX="9.0" layoutY="113.0" prefHeight="45.0" prefWidth="320.0">
+                                        <TextField fx:id="inputSubField2" layoutX="9.0" layoutY="113.0" prefHeight="45.0" prefWidth="250.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
 
                                         <Label fx:id="lblSubField3" layoutX="9.0" layoutY="164.0" text="Поле класу 3">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <TextField fx:id="inputSubField3" layoutX="9.0" layoutY="194.0" prefHeight="45.0" prefWidth="320.0">
+                                        <TextField fx:id="inputSubField3" layoutX="9.0" layoutY="194.0" prefHeight="45.0" prefWidth="250.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
 
                                         <Label fx:id="lblSubField4" layoutX="9.0" layoutY="239.0" text="Поле класу 4">
                                             <font><Font size="20.0" /></font>
                                         </Label>
-                                        <TextField fx:id="inputSubField4" layoutX="9.0" layoutY="269.0" prefHeight="45.0" prefWidth="320.0">
+                                        <TextField fx:id="inputSubField4" layoutX="9.0" layoutY="269.0" prefHeight="45.0" prefWidth="250.0">
                                             <font><Font size="20.0" /></font>
                                         </TextField>
                                     </children>
                                 </Pane>
 
-                                <RadioButton fx:id="radioPiece" layoutX="411.0" layoutY="126.0" mnemonicParsing="false" text="Штучний">
+                                <RadioButton fx:id="radioPiece" layoutX="356.0" layoutY="126.0" mnemonicParsing="false" text="Штучний">
                                     <font><Font size="25.0" /></font>
                                 </RadioButton>
-                                <RadioButton fx:id="radioWeight" layoutX="411.0" layoutY="173.0" mnemonicParsing="false" text="Ваговий">
+                                <RadioButton fx:id="radioWeight" layoutX="356.0" layoutY="173.0" mnemonicParsing="false" text="Ваговий">
                                     <font><Font size="25.0" /></font>
                                 </RadioButton>
-                                <RadioButton fx:id="radioRestricted" layoutX="411.0" layoutY="221.0" mnemonicParsing="false" text="З обмеженнями">
+                                <RadioButton fx:id="radioRestricted" layoutX="356.0" layoutY="221.0" mnemonicParsing="false" text="З обмеженнями">
                                     <font><Font size="25.0" /></font>
                                 </RadioButton>
-                                <RadioButton fx:id="radioCustom" layoutX="411.0" layoutY="271.0" mnemonicParsing="false" text="Власна продукція">
+                                <RadioButton fx:id="radioCustom" layoutX="356.0" layoutY="271.0" mnemonicParsing="false" text="Власна продукція">
                                     <font><Font size="25.0" /></font>
                                 </RadioButton>
 
-                                <Button layoutX="820.0" layoutY="51.0" onAction="#onClearSupplyFieldsClick" prefHeight="40.0" prefWidth="320.0" text="Очистити">
+                                <Button layoutX="997.0" layoutY="44.0" onAction="#onClearSupplyFieldsClick" prefHeight="40.0" prefWidth="320.0" text="Очистити">
                                     <font><Font size="22.0" /></font>
                                 </Button>
+
+                                <Label layoutX="627.0" layoutY="49.0" text="Дії над товарами">
+                                    <font><Font name="System Bold" size="25.0" /></font>
+                                </Label>
+
+                                <Pane layoutX="627.0" layoutY="92.0" prefHeight="605.0" prefWidth="295.0" style="-fx-background-color: white;">
+                                    <children>
+                                        <Label layoutX="8.0" layoutY="6.0" prefHeight="30.0" prefWidth="233.0" text="Код товару:">
+                                            <font><Font size="20.0" /></font>
+                                        </Label>
+                                        <TextField fx:id="inputActionProductCode" layoutX="8.0" layoutY="36.0" prefHeight="45.0" prefWidth="279.0">
+                                            <font><Font size="20.0" /></font>
+                                        </TextField>
+
+                                        <Label layoutX="9.0" layoutY="88.0" prefHeight="30.0" prefWidth="78.0" text="Назва:">
+                                            <font><Font size="20.0" /></font>
+                                        </Label>
+                                        <Label fx:id="lblActionProductName" layoutX="83.0" layoutY="88.0" prefHeight="30.0" prefWidth="200.0" text="---">
+                                            <font><Font size="20.0" /></font>
+                                        </Label>
+
+                                        <Label layoutX="9.0" layoutY="150.0" prefHeight="30.0" prefWidth="270.0" text="Встановити знижку (0-1.0):">
+                                            <font><Font size="20.0" /></font>
+                                        </Label>
+                                        <TextField fx:id="inputActionDiscount" layoutX="9.0" layoutY="180.0" prefHeight="45.0" prefWidth="279.0">
+                                            <font><Font size="20.0" /></font>
+                                        </TextField>
+                                        <Button layoutX="8.0" layoutY="231.0" onAction="#onApplyDiscountClick" prefHeight="46.0" prefWidth="279.0" text="Застосувати">
+                                            <font><Font size="22.0" /></font>
+                                        </Button>
+
+                                        <Label layoutX="10.0" layoutY="310.0" prefHeight="30.0" prefWidth="270.0" text="Списати вручну (кількість):">
+                                            <font><Font size="20.0" /></font>
+                                        </Label>
+                                        <TextField fx:id="inputActionWaste" layoutX="10.0" layoutY="340.0" prefHeight="45.0" prefWidth="279.0">
+                                            <font><Font size="20.0" /></font>
+                                        </TextField>
+                                        <Button layoutX="9.0" layoutY="395.0" onAction="#onManualWasteClick" prefHeight="46.0" prefWidth="279.0" text="Списати">
+                                            <font><Font size="22.0" /></font>
+                                        </Button>
+
+                                        <Label layoutX="10.0" layoutY="480.0" prefHeight="30.0" prefWidth="270.0" text="Повне видалення:">
+                                            <font><Font size="20.0" /></font>
+                                        </Label>
+                                        <Button layoutX="9.0" layoutY="515.0" onAction="#onDeleteFromCatalogClick" prefHeight="46.0" prefWidth="279.0" text="Видалити з бази">
+                                            <font><Font size="22.0" /></font>
+                                        </Button>
+                                    </children>
+                                </Pane>
                             </children>
                         </AnchorPane>
                     </content>
