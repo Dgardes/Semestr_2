@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/26" fx:controller="org.example.drachlab_291.HelloController">
+    <children>
+        <ImageView fx:id="imageView" fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+
+        <Button layoutX="268.0" layoutY="350.0" onAction="#onNextClick" prefHeight="25.0" prefWidth="80.0" text="Наступне" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="268.0" AnchorPane.rightAnchor="252.0" />
+    </children>
+</AnchorPane>

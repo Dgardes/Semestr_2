@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.drachlab_282.HelloController">
+    <children>
+        <ListView fx:id="productListView" layoutX="20.0" layoutY="20.0" prefHeight="360.0" prefWidth="200.0" />
+
+        <Label layoutX="250.0" layoutY="40.0" text="Назва товару:" />
+        <TextField fx:id="nameField" editable="false" layoutX="250.0" layoutY="60.0" prefWidth="300.0" />
+
+        <Label layoutX="250.0" layoutY="120.0" text="Ціна:" />
+        <TextField fx:id="priceField" editable="false" layoutX="250.0" layoutY="140.0" prefWidth="300.0" />
+
+        <Label layoutX="250.0" layoutY="200.0" text="Категорія:" />
+        <TextField fx:id="categoryField" editable="false" layoutX="250.0" layoutY="220.0" prefWidth="300.0" />
+
+        <Label layoutX="250.0" layoutY="280.0" text="Статус наявності:" />
+        <TextField fx:id="statusField" editable="false" layoutX="250.0" layoutY="300.0" prefWidth="300.0" />
+    </children>
+</AnchorPane>

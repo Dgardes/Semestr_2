@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="300.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.drachlab_272.HelloController">
+    <children>
+        <TextField fx:id="num1Field" layoutX="50.0" layoutY="40.0" />
+        <ChoiceBox fx:id="operatorChoice" layoutX="50.0" layoutY="90.0" prefWidth="150.0" />
+        <TextField fx:id="num2Field" layoutX="50.0" layoutY="140.0" />
+        <Button fx:id="calculateButton" layoutX="50.0" layoutY="190.0" onAction="#onCalculateClick" text="Розрахувати" />
+        <Label fx:id="resultLabel" layoutX="50.0" layoutY="240.0" text="Результат: " />
+    </children>
+</AnchorPane>
